@@ -10,7 +10,7 @@ import numpy as np
 import scipy.stats
 
 
-file1 = 'C:/Users/admin/Downloads/COVID19Casos (1).csv'
+file1 = 'C:/Users/admin/Downloads/COVID19Casos (2).csv'
 
 #######################\
 # Read from the path - It takes long because it is a excel file
