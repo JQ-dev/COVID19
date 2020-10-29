@@ -7,7 +7,7 @@ Created on Sun May 31 16:56:04 2020
 
 
 file1 = 'C:/Users/admin/Downloads/SINADEF_DATOS_ABIERTOS_22102020.xlsx'
-file2 = 'C:/Users/admin/Downloads/HIST_PAINEL_COVIDBR_19out2020.csv'
+file2 = 'C:/Users/admin/Downloads/HIST_PAINEL_COVIDBR_26out2020.csv'
 file3 = 'C:/Users/admin/Downloads/201019COVID19MEXICO.csv'
 
 version = '90'

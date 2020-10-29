@@ -10,7 +10,7 @@ import numpy as np
 import scipy.stats
 
 
-file1 = 'C:/Users/admin/Downloads/COVID19Casos (2).csv'
+file1 = 'C:/Users/admin/Downloads/COVID19Casos.csv'
 
 #######################\
 # Read from the path - It takes long because it is a excel file
@@ -71,6 +71,6 @@ df_main = df_main.fillna(0)
 df_main = df_main.drop(['index'],axis=1)
 
 
-df_main.to_csv('C:/Users/admin/Downloads/Peru/COVID_ARG_201017.csv',index=False)
+df_main.to_csv('C:/Users/admin/Downloads/Peru/COVID_ARG_251017.csv',index=False)
 
 del cond, df
