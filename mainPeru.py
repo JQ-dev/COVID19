@@ -10,7 +10,7 @@ import numpy as np
 
 
 
-version = '89'
+version = '90'
 path0 = 'C:/Users/admin/Downloads/Peru/Peru_deathsX_'+version+'.csv'
 
 file1 = 'C:/Users/admin/Downloads/SINADEF_DATOS_ABIERTOS_22102020.xlsx'
@@ -173,15 +173,16 @@ del poblacion_d , poblacion_c
 ###############################################################################
 
 try:
-    df_casesX = pd.read_csv('https://cloud.minsa.gob.pe/s/Y8w3wHsEdYQSZRp/download',sep=',',engine='python')
+    df_casesX = pd.read_csv('https://cloud.minsa.gob.pe/s/Y8w3wHsEdYQSZRp/download',sep=';',engine='python')
 except:
-    df_casesX = pd.read_csv('https://cloud.minsa.gob.pe/s/Y8w3wHsEdYQSZRp/download',sep=',',engine='python')
+    df_casesX = pd.read_csv('https://cloud.minsa.gob.pe/s/Y8w3wHsEdYQSZRp/download',sep=';',engine='python')
         
-    
+
+# df_casesX.columns
 #cases = pd.read_csv('C:/Users/admin/Downloads/Peru/positivos_covid.csv',sep=',')
 
 # Reducing columns
-df_cases = df_casesX.loc[:,('DEPARTAMENTO','PROVINCIA','FECHA_RESULTADO','EDAD')].copy()
+df_cases = df_casesX.loc[:,['DEPARTAMENTO','PROVINCIA','FECHA_RESULTADO','EDAD']].copy()
 
 a = df_cases['DEPARTAMENTO'].apply(lambda x : '('+x[0:3]+')' )
 df_cases['PROVINCIA'] = df_cases['PROVINCIA'] + a
@@ -279,7 +280,7 @@ a = a.loc[a['DEPARTAMENTO DOMICILIO']=='LIMA',:].copy()
 
 
 
-df_deathsX = pd.read_csv('https://cloud.minsa.gob.pe/s/Md37cjXmjT9qYSa/download',sep=',',engine='python')
+df_deathsX = pd.read_csv('https://cloud.minsa.gob.pe/s/Md37cjXmjT9qYSa/download',sep=';',engine='python')
 
 
 # Reducing columns
@@ -366,6 +367,10 @@ Peru_deaths_final.columns = ['DEPARTAMENTO DOMICILIO', 'PROVINCIA DOMICILIO', 'F
 
 Peru_deaths_final = Peru_deaths_final.fillna(0)
 
+#################################################################################
+
+
+Peru_norm = Peru_deaths_final[Peru_deaths_final['EDAD']=='99'].copy()
 
 
 #################################################################################
@@ -375,3 +380,36 @@ Peru_deaths_final.to_csv(path0,index=False)
 
 del Peru_deaths_final, a, df_cases, df_casesX, df_deaths, df_deathsX
 del  fallecidosX, path0, poblacion
+
+
+#################################################################################
+Peru_norm2 = Peru_norm.copy()
+Peru_norm = Peru_norm2.copy()
+
+cond =  Peru_norm['PROVINCIA DOMICILIO'].apply(lambda x : "Todas en" in x )
+Peru_norm = Peru_norm[cond]
+
+cond =  Peru_norm['PROVINCIA DOMICILIO'].apply(lambda x : "Todas en Peru" not in x )
+Peru_norm = Peru_norm[cond]
+
+#deptos = Peru_norm['DEPARTAMENTO DOMICILIO'].drop_duplicates()
+deptos = ['UCAYALI','TUMBES','PIURA','MOQUEGUA','LORETO','LIMA','LA LIBERTAD','CUSCO','AREQUIPA']
+cond =  Peru_norm['DEPARTAMENTO DOMICILIO'].apply(lambda x : x in deptos )
+Peru_norm = Peru_norm[cond]
+
+
+Peru_norm = Peru_norm.drop(['PROVINCIA DOMICILIO','EDAD'],axis=1)
+
+
+
+Peru_norm = Peru_norm.groupby('DEPARTAMENTO DOMICILIO','FECHA')
+
+
+
+
+
+
+
+
+
+
