@@ -13,6 +13,10 @@ import numpy as np
 data = pd.read_csv('https://www.datos.gov.co/api/views/gt2j-8ykr/rows.csv?accessType=DOWNLOAD')
 Ultimo_registro = ( '\nCasos: ' + str(data.iloc[-1,:]['ID de caso']) + ' \nFecha: ' + data.iloc[-1,:]['fecha reporte web'] )
 
+# data.columns
+
+data = data.rename(columns={'Código DIVIPOLA municipio':'Código DIVIPOLA'})
+
 data['Código DIVIPOLA'] = data['Código DIVIPOLA'].replace(27,27001).replace(25,11001)
 
 data['Cod_M'] = data['Código DIVIPOLA']
@@ -123,6 +127,7 @@ import numpy as np
 
 total = pd.read_csv('https://www.datos.gov.co/api/views/gt2j-8ykr/rows.csv?accessType=DOWNLOAD')
 
+total = total.rename(columns={'Código DIVIPOLA municipio':'Código DIVIPOLA'})
 
 total['Fecha de muerte'] = total['Fecha de muerte'].fillna(0)
 total['Código DIVIPOLA'] = total['Código DIVIPOLA'].replace(5,5001)
@@ -204,7 +209,7 @@ del cases, col, date, dates, deaths, dpto, dptos, name_d, new_cols, pop, pop_d, 
 
 print('\n\nUltimo registro: ',Ultimo_registro,  '\nTests hasta: ',Ultimo_test)
 
-data_tests.to_csv('C:/Users/admin/Downloads/COVID COLOMBIA/COVID_COL_2810.csv',index=False)
+data_tests.to_csv('C:/Users/admin/Downloads/COVID COLOMBIA/COVID_COL_201030.csv',index=False)
 
 del Ultimo_registro, Ultimo_test, data_tests
 
