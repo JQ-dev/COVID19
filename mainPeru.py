@@ -10,10 +10,10 @@ import numpy as np
 
 
 
-version = '93'
+version = '95'
 path0 = 'C:/Users/admin/Downloads/Peru/Peru_deathsX_'+version+'.csv'
 
-file1 = 'C:/Users/admin/Downloads/SINADEF_DATOS_ABIERTOS_01112020.xlsx'
+file1 = 'C:/Users/admin/Downloads/SINADEF_DATOS_ABIERTOS_05112020.xlsx'
 
 #######################\
 # Read from the path - It takes long because it is a excel file

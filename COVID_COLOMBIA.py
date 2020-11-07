@@ -209,7 +209,7 @@ del cases, col, date, dates, deaths, dpto, dptos, name_d, new_cols, pop, pop_d, 
 
 print('\n\nUltimo registro: ',Ultimo_registro,  '\nTests hasta: ',Ultimo_test)
 
-data_tests.to_csv('C:/Users/admin/Downloads/COVID COLOMBIA/COVID_COL_201030.csv',index=False)
+data_tests.to_csv('C:/Users/admin/Downloads/COVID COLOMBIA/COVID_COL_201106.csv',index=False)
 
 del Ultimo_registro, Ultimo_test, data_tests
 
