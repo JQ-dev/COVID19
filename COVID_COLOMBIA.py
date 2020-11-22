@@ -10,19 +10,55 @@ import numpy as np
 
 #######################\n
 #data = pd.read_csv('C:/Users/admin/Downloads/COVID COLOMBIA/Casos_positivos_de_COVID-19_en_Colombia.csv')
-data = pd.read_csv('https://www.datos.gov.co/api/views/gt2j-8ykr/rows.csv?accessType=DOWNLOAD')
-Ultimo_registro = ( '\nCasos: ' + str(data.iloc[-1,:]['ID de caso']) + ' \nFecha: ' + data.iloc[-1,:]['fecha reporte web'] )
+data0 = pd.read_csv('https://www.datos.gov.co/api/views/gt2j-8ykr/rows.csv?accessType=DOWNLOAD')
+Ultimo_registro = ( '\nCasos: ' + str(data0.iloc[-1,:]['ID de caso']) + ' \nFecha: ' + data0.iloc[-1,:]['fecha reporte web'] )
 
-# data.columns
+# list(data.columns)
+data = data0.loc[:,:].copy()
 
-data = data.rename(columns={'Código DIVIPOLA municipio':'Código DIVIPOLA'})
+
+data = data.rename(columns={'Código DIVIPOLA municipio':'Código DIVIPOLA'}).copy()
 
 data['Código DIVIPOLA'] = data['Código DIVIPOLA'].replace(27,27001).replace(25,11001)
 
 data['Cod_M'] = data['Código DIVIPOLA']
 data['Cod_D'] = data['Código DIVIPOLA'].apply(lambda x : round(x/1000,0))
-data = data.drop('Código DIVIPOLA',axis=1)
+#data = data.drop('Código DIVIPOLA',axis=1)
 
+
+data['fecha reporte web'] = pd.to_datetime(data['fecha reporte web'],format="%d/%m/%Y %H:%M:%S")
+data['Fecha de notificación'] = pd.to_datetime(data['Fecha de notificación'],format="%d/%m/%Y %H:%M:%S")
+data['Fecha de muerte'] = pd.to_datetime(data['Fecha de muerte'],format="%d/%m/%Y %H:%M:%S")
+data['Fecha de recuperación'] = pd.to_datetime(data['Fecha de recuperación'],format="%d/%m/%Y %H:%M:%S")
+data['Fecha de diagnóstico'] = pd.to_datetime(data['Fecha de diagnóstico'],format="%d/%m/%Y %H:%M:%S")
+
+
+
+'''
+['fecha reporte web',
+ 'ID de caso',
+ 'Fecha de notificación',
+ 'Código DIVIPOLA departamento',
+ 'Nombre departamento',
+ 'Código DIVIPOLA municipio',
+ 'Nombre municipio',
+ 'Edad',
+ 'Unidad de medida de edad',
+ 'Sexo',
+ 'Tipo de contagio',
+ 'Ubicación del caso',
+ 'Estado',
+ 'Código ISO del país',
+ 'Nombre del país',
+ 'Recuperado',
+ 'Fecha de inicio de síntomas',
+ 'Fecha de muerte',
+ 'Fecha de diagnóstico',
+ 'Fecha de recuperación',
+ 'Tipo de recuperación',
+ 'Pertenencia étnica',
+ 'Nombre del grupo étnico']
+'''
 
 #######################
 
@@ -36,7 +72,7 @@ data_pop = data_pop.reset_index(col_fill='COD_M')
 
 data_pop = data_pop.rename(columns={'index':'Cod_M'})
 
-del data, pop
+del pop
 
 #######################
 
@@ -76,11 +112,12 @@ tests.loc[ (tests.loc[:,'test_Dpto_dia'] < 0) , 'test_Dpto_dia' ] = 0
 
 
 #######################
-tests['Fecha'] = tests['Fecha'].apply(lambda x : x[0:10])
-tests.index = tests['Fecha']+ tests['COD_dpto'].apply(str)
+tests['Fecha'] = pd.to_datetime(tests['Fecha'],format="%Y-%m-%d %H:%M:%S.%f")
+####tests['Fecha'] = tests['Fecha'].apply(lambda x : x[0:10])
+tests.index = tests['Fecha'].apply(str)+ tests['COD_dpto'].apply(str)
 
-data_pop['fecha reporte web'] = data_pop['fecha reporte web'].apply(lambda x : x[0:10])
-data_pop.index = data_pop['fecha reporte web']+ data_pop['Cod_D'].apply(str)
+#######data_pop['fecha reporte web'] = data_pop['fecha reporte web'].apply(lambda x : x[0:10])
+data_pop.index = data_pop['fecha reporte web'].apply(str)+ data_pop['Cod_D'].apply(str)
 
 
 
@@ -117,7 +154,7 @@ del add_code, data_pop, tests
 
 
 
-
+'''
 ###############################################################################
 ###############################################################################
 
@@ -125,7 +162,9 @@ import pandas as pd
 import numpy as np
 
 
-total = pd.read_csv('https://www.datos.gov.co/api/views/gt2j-8ykr/rows.csv?accessType=DOWNLOAD')
+#total = pd.read_csv('https://www.datos.gov.co/api/views/gt2j-8ykr/rows.csv?accessType=DOWNLOAD')
+total = data.copy()
+
 
 total = total.rename(columns={'Código DIVIPOLA municipio':'Código DIVIPOLA'})
 
@@ -140,9 +179,11 @@ deaths = deaths.rename(columns={'Fecha de muerte':'DATE'})
 
 deaths = deaths.groupby(['COD_D','DATE']).count().reset_index()
 
-cases = total.loc[ : ,('COD_D','FIS')]
+#list(deaths.columns)
+#list(total.columns)
+cases = total.loc[ : ,('COD_D','Fecha de inicio de síntomas')]
 cases['CASES'] = 1   
-cases = cases.rename(columns={'FIS':'DATE'})
+cases = cases.rename(columns={'Fecha de inicio de síntomas':'DATE'})
 cases = cases.loc[ cases.loc[:,'DATE']!= 'Asintomático' , :]
 
 
@@ -202,14 +243,14 @@ total['State'] = total['COD_D'].map(name_d)
 COVID_COL = total.drop(['COD_D'],axis=1)
 
 
-COVID_COL.to_csv('C:/Users/admin/Downloads/Peru/Colombia_COVID_88.csv',index=False)
+COVID_COL.to_csv('C:/Users/admin/Downloads/Peru/Colombia_COVID_99.csv',index=False)
 
 del cases, col, date, dates, deaths, dpto, dptos, name_d, new_cols, pop, pop_d, temp, temp_dict, total
-
+'''
 
 print('\n\nUltimo registro: ',Ultimo_registro,  '\nTests hasta: ',Ultimo_test)
 
-data_tests.to_csv('C:/Users/admin/Downloads/COVID COLOMBIA/COVID_COL_201106.csv',index=False)
+data_tests.to_csv('C:/Users/admin/Downloads/COVID COLOMBIA/COVID_COL_201116.csv',index=False)
 
 del Ultimo_registro, Ultimo_test, data_tests
 
