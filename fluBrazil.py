@@ -19,15 +19,20 @@ import matplotlib.pyplot as plt
 #cities = {'pa':['Belém','Santarém'],'ap':['Macapá'],'ce':['Fortaleza','Sobral'],'sc':['Itajaí','Balneário Camboriú','Florinápolis','Joinville'],
 #          'am':['Manaus','Tefé','Parintins','Tabatinga'],'ma':['São Luís'],'pe':['Recife'],'rn':['Natal']}
 
+
+
 option = 1
 
 if option == 1:
     
-    states = ['sc (13)','am (3)']
-    cities = {'sc (13)':['Joinvile','Florianópolis','Blumenau','São José','Chapecó','Itajaí',
+    states = ['sc-1 (1)','sc-2 (1)','am (3)']
+    cities = {'sc-1 (1)':['Joinvile','Florianópolis','Blumenau','São José','Chapecó','Itajaí',
                     'Criciúma','Jaraguá do Sul','Palhoça','Lages','Balneário Camboriú',
                     'Brusque','Camboriú','Navegantes'],
-                'am (3)':['Manaus','Parintins']}
+              'sc-2 (1)':['Joinvile','Florianópolis','Blumenau','São José','Chapecó','Itajaí',
+                    'Criciúma','Jaraguá do Sul','Palhoça','Lages','Balneário Camboriú',
+                    'Brusque','Camboriú','Navegantes'],
+              'am (3)':['Manaus','Parintins']}
 
     #dfX = pd.read_csv('C:/Users/admin/Downloads/dados-ce.csv',sep=';',engine='python')
     
@@ -64,7 +69,7 @@ if option == 1:
         
  # ,'bairro','cep'
 
-    df.to_csv('C:/Users/admin/Downloads/Peru/Brasil_Saude_80.csv', index=False)
+    df.to_csv('C:/Users/admin/Downloads/Peru/Brasil_Saude_82.csv', index=False)
     
     del df, state, states, restric, df0, cities, path,df1, option, to_drop
 
