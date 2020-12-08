@@ -19,9 +19,9 @@ Created on Tue Nov 24 10:40:03 2020
 import pandas as pd
 
 
-file3 = 'C:/Users/admin/Downloads/201123COVID19MEXICO.csv'
+file3 = 'C:/Users/admin/Downloads/201202COVID19MEXICO.csv'
 
-version = '100'
+version = '101'
 path5 = 'C:/Users/admin/Downloads/Peru/Mexico_Hospital_'+version+'.csv'
 
 ###############################################################################

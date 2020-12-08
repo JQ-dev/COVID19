@@ -25,8 +25,8 @@ option = 1
 
 if option == 1:
     
-    states = ['sc-1 (1)','sc-2 (1)','am (3)']
-    cities = {'sc-1 (1)':['Joinvile','Florianópolis','Blumenau','São José','Chapecó','Itajaí',
+    states = ['sc-1 (2)','sc-2 (2)']
+    cities = {'sc-1 (2)':['Joinvile','Florianópolis','Blumenau','São José','Chapecó','Itajaí',
                     'Criciúma','Jaraguá do Sul','Palhoça','Lages','Balneário Camboriú',
                     'Brusque','Camboriú','Navegantes'],
               'sc-2 (1)':['Joinvile','Florianópolis','Blumenau','São José','Chapecó','Itajaí',
@@ -69,7 +69,7 @@ if option == 1:
         
  # ,'bairro','cep'
 
-    df.to_csv('C:/Users/admin/Downloads/Peru/Brasil_Saude_82.csv', index=False)
+    df.to_csv('C:/Users/admin/Downloads/Peru/Brasil_Saude_100.csv', index=False)
     
     del df, state, states, restric, df0, cities, path,df1, option, to_drop
 
