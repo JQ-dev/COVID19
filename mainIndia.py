@@ -7,7 +7,7 @@ Created on Wed Oct 28 22:05:13 2020
 
 import pandas as pd 
 
-version = '08'
+version = '12'
 path0 = 'C:/Users/admin/Downloads/Peru/CovidIndia_'+version+'.csv'
 
 i = 1

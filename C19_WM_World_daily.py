@@ -245,16 +245,60 @@ def db_to_file(last):
     database.to_csv(path1,index=False)
     #pop.to_csv(path2,index=False)
     
-    
+consecutive = '111'  
 
-
-
-db_to_file('106')
+db_to_file(consecutive)
 
 
 ########################3
 
-#df = pd.read_csv('C:/Users/admin/Downloads/Peru/Covid_worldometers052.csv')
+df = pd.read_csv('C:/Users/admin/Downloads/Peru/Covid_worldometers' + consecutive + '.csv')
+
+mob = pd.read_csv('C:/Users/admin/Downloads/Global_Mobility_Report (5).csv')
+
+list(df.columns)
+list(mob.columns)
+
+mob = mob[mob['sub_region_1'].isnull()]
+mob = mob[mob['sub_region_2'].isnull()]
+
+mob = mob.drop(['country_region_code', 'sub_region_1',
+ 'sub_region_2', 'metro_area', 'iso_3166_2_code',
+ 'census_fips_code'],axis=1)
+
+mob.columns =   ['country', 'dates',
+ 'retail_and_recreation', 'grocery_and_pharmacy',
+ 'parks', 'transit_stations', 'workplaces', 'residential']  
+    
+mob['country'] = mob['country'].str.upper()
+
+
+#c_mob = mob['country'].drop_duplicates()
+#c_df = df['country'].drop_duplicates()
+
+
+renaming = [['UNITED KINGDOM','UK'],['UNITED STATES','USA'],['UNITED ARAB EMIRATES','UAE'],
+           ['CAPE VERDE','CABO VERDE'],['MYANMAR (BURMA)','MYANMAR'],['SOUTH KOREA','S. KOREA'],
+           ['THE BAHAMAS','BAHAMAS'],['CÔTE D\'IVOIRE','IVORY COAST'],['',''],['','']]
+
+
+
+
+for new_name in renaming:
+    print(new_name[0],new_name[1])
+    mob['country'] = mob['country'].replace(new_name[0],new_name[1])
+
+
+c_join = pd.merge(df, mob, how='left', on=['country','dates'])
+
+path1 = 'C:/Users/admin/Downloads/Peru/Covid_worldometers' + consecutive + '.csv'
+
+c_join.to_csv(path1,index=False)
+
+
+#del c_df, c_mob
+del c_join, consecutive, df, mob, path1, renaming, new_name
+
 #
 #df_pop = pd.read_csv('C:/Users/admin/Downloads/Peru/Population_worldometers048.csv')
 #

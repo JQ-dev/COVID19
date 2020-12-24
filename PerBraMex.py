@@ -6,23 +6,15 @@ Created on Sun May 31 16:56:04 2020
 """
 
 
-file1 = 'C:/Users/admin/Downloads/SINADEF_DATOS_ABIERTOS_22102020.xlsx'
-file2 = 'C:/Users/admin/Downloads/HIST_PAINEL_COVIDBR_26out2020.csv'
-file3 = 'C:/Users/admin/Downloads/201019COVID19MEXICO.csv'
+file1 = 'C:/Users/admin/Downloads/SINADEF_DATOS_ABIERTOS_13122020.xlsx'
 
-version = '90'
+
+version = '101'
 
 path0 = 'C:/Users/admin/Downloads/Peru/Peru_deaths_'+version+'.csv'
 path1 = 'C:/Users/admin/Downloads/Peru/fallecidos_Peru_XX'+version+'.csv'
 path2 = 'C:/Users/admin/Downloads/Peru/Peru_COVID_'+version+'.csv'
 path3 = 'C:/Users/admin/Downloads/Peru/Peru_Sala_Situacional_'+version+'.csv'
-
-path4 = 'C:/Users/admin/Downloads/Peru/Brasil_COVID_'+version+'.csv'
- 
-path5 = 'C:/Users/admin/Downloads/Peru/Mexico_Hospital_'+version+'.csv'
-
-path6 = 'C:/Users/admin/Downloads/Peru/Global_Mobility_Report_'+version+'.csv'
-
 
 
 
@@ -512,120 +504,12 @@ Peru.to_csv(path3,index=False)
 
 
 
-#    BRASIL
-
-
-
-
-
-
-###############################################################################
-###############################################################################
-
-
-import pandas as pd
-import numpy as np
-
-
-
-#total = pd.read_excel(file2, sheet_name='Sheet 1')
-total = pd.read_csv(file2,sep=';')
-
-total2 = total.loc[:,('estado','municipio','data','populacaoTCU2019','casosNovos','casosAcumulado','obitosNovos','obitosAcumulado')]
-
-total2 = total2.loc[ total2.loc[:,'municipio'].isna() ,:]
-total2 = total2.loc[ total2.loc[:,'populacaoTCU2019'].notna() ,:]
-total2 = total2.loc[ total2.loc[:,'estado'].notna() ,:]
-
-total2 = total2.drop('municipio',axis=1)
-
-estados = {'AC':'Acre','AL':'Alagoas','AP':'Amapá','AM':'Amazonas','BA':'Bahia',
-'CE':'Ceará','ES':'Espírito Santo','GO':'Goiás','MA':'Maranhão','MT':'Mato Grosso',
-'MS':'Mato Grosso do Sul','MG':'Minas Gerais','PA':'Pará','PB':'Paraíba','PR':'Paraná',
-'PE':'Pernambuco','PI':'Piauí','RJ':'Rio de Janeiro','RN':'Rio Grande do Norte',
-'RS':'Rio Grande do Sul','RO':'Rondônia','RR':'Roraima','SC':'Santa Catarina',
-'SP':'São Paulo','SE':'Sergipe','TO':'Tocantins','DF':'Distrito Federal'}
-
-total2['estado'] = total2['estado'].map(estados)
-
-
-
-
-total2.to_csv(path4,index=False)
-
-
-del estados, total
 
 
 
 ###############################################################################
 ###############################################################################
 ###############################################################################
-
-
-
-
-#    MEXICO
-
-
-
-
-###############################################################################
-###############################################################################
-
-df_MX = pd.read_csv(file3,engine='python')
-list(df_MX.columns)
-# Only tests data
-tests = df_MX.loc[:,['FECHA_INGRESO','ENTIDAD_RES','MUNICIPIO_RES','RESULTADO_LAB']]
-tests['tests'] = 1
-tests = tests.groupby(['FECHA_INGRESO','ENTIDAD_RES','MUNICIPIO_RES','RESULTADO_LAB']).count().reset_index()
-
-# Creating unique code
-df_MX['CODE'] = df_MX['ENTIDAD_RES']*1000 + df_MX['MUNICIPIO_RES']
-
-# Useless columns test removal + new ones
-df_MX = df_MX.loc[:,['CODE','SEXO','TIPO_PACIENTE','RESULTADO_LAB','FECHA_INGRESO','FECHA_SINTOMAS',
-                     'FECHA_DEF','INTUBADO','NEUMONIA','EDAD','EMBARAZO','DIABETES','EPOC','ASMA','INMUSUPR',
-                     'HIPERTENSION','OTRA_COM','CARDIOVASCULAR','OBESIDAD','RENAL_CRONICA','TABAQUISMO',
-                     'OTRO_CASO','UCI','PAIS_ORIGEN']]
-
-# Dict to assigne names
-mx_sexo = {1:'Mujer',2:'Hombre',99:'N/A'}
-mx_paciente = {1:'Ambulat',2:'Hospit',99:'N/A'}
-mx_resultado = {1:'Positivo',2:'No positivo',3:'Pendiente'}
-
-
-
-
-
-
-
-# Dicts for naming cities and states
-mx_munic = pd.read_csv('C:/Users/admin/Downloads/Peru/Mun_Mexico.csv')
-mx_munic['CODE'] = mx_munic['COD_E']*1000 + mx_munic['COD_M']
-
-
-mx_code1 = mx_munic.set_index('CODE').to_dict()['MUNICIPIO']
-mx_code2 = mx_munic.set_index('CODE').to_dict()['ESTADO']
-
-df_MX['MUN'] = df_MX['CODE'].map(mx_code1)
-df_MX['EST'] = df_MX['CODE'].map(mx_code2)
-
-
-
-#rename = [['mx_sexo','SEXO'],['mx_paciente','TIPO_PACIENTE'],['mx_resultado','RESULTADO'],
-#          ['mx_code1','MUN'],['mx_code2','EST']]
-
-
-
-
-
-#for col in rename:
-#    df_MX.loc[:,col[1]] = df_MX.loc[:,col[1]].map(eval(col[0]))
-
-
-df_MX.to_csv(path5,index=False)
-
 
 
 ####################################3
