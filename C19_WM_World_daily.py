@@ -10,6 +10,7 @@ import json
 from datetime import date
 import datetime
 import numpy as np
+import datetime
 
 
 def population():
@@ -185,6 +186,19 @@ def extract_charts(country):
     return country_table
 
 
+def add_years(d, years):
+    """Return a date that's `years` years after the date (or datetime)
+    object `d`. Return the same calendar date (month and day) in the
+    destination year, if it exists, otherwise use the following day
+    (thus changing February 29 to March 1).
+
+    """
+    try:
+        return d.replace(year = d.year + years)
+    except ValueError:
+        return d + (date(d.year + years, 1, 1) - date(d.year, 1, 1))
+
+
 
 def db_to_file(last):
 
@@ -206,8 +220,42 @@ def db_to_file(last):
     database['country'] = database['country'].replace('country/','',regex=True).replace('/','',regex=True).str.upper()
     
     database = database.fillna(0)
+  
+    
+    
     
     database.loc[:,'dates'] = database.loc[:,'dates'].apply(lambda x : datetime.datetime.strptime( x +' 2020', '%b %d %Y') )
+    
+
+
+    database['diff'] = (database['dates'] - database['dates'].shift(periods=1)).apply(lambda x: x.days)
+    database['diff'] = database['diff'].fillna(1)
+    
+    #database['dates2'] = database['dates'].copy()
+
+
+    mod_year = False
+    for row in range(1,len(database['dates'])-1):
+        diff = database['diff'].iloc[row+1]
+
+        if diff < 0:
+            mod_year = True
+            
+        if diff > 1:
+            mod_year = False            
+
+        if mod_year == True:
+            
+            try:
+                database['dates'].iloc[row+1] =  add_years(database['dates'].iloc[row+1], 1)
+                #print(diff)
+            except:
+                continue
+            
+        
+    database = database.drop(['diff'],axis=1)
+    
+
     
     database = database.rename(columns={"'cases-cured-daily'": 'recovered',
                                         "'graph-cases-daily'": 'cases',
@@ -244,23 +292,34 @@ def db_to_file(last):
     
     database.to_csv(path1,index=False)
     #pop.to_csv(path2,index=False)
+
+
+
+
+
     
-consecutive = '111'  
+consecutive = '122'  
+last = '122'
 
 db_to_file(consecutive)
+
+
+
 
 
 ########################3
 
 df = pd.read_csv('C:/Users/admin/Downloads/Peru/Covid_worldometers' + consecutive + '.csv')
 
-mob = pd.read_csv('C:/Users/admin/Downloads/Global_Mobility_Report (5).csv')
+mob = pd.read_csv('C:/Users/admin/Downloads/Global_Mobility_Report (10).csv')
 
 list(df.columns)
 list(mob.columns)
 
 mob = mob[mob['sub_region_1'].isnull()]
 mob = mob[mob['sub_region_2'].isnull()]
+mob = mob[mob['metro_area'].isnull()]
+
 
 mob = mob.drop(['country_region_code', 'sub_region_1',
  'sub_region_2', 'metro_area', 'iso_3166_2_code',

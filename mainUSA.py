@@ -145,7 +145,7 @@ naming_US = naming.loc[ naming.loc[ : ,'Country'] == 'US' ,  ]
 
 
 
-total_US.to_csv('US_covid-19_data.csv')
+total_US.to_csv('US_covid-19_data201228.csv')
 #naming_US.to_csv('US_covid-19_names.csv')
 
 

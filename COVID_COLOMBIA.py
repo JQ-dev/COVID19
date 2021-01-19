@@ -26,11 +26,19 @@ data['Cod_D'] = data['Código DIVIPOLA'].apply(lambda x : round(x/1000,0))
 #data = data.drop('Código DIVIPOLA',axis=1)
 
 
+data = data[data['ID de caso'].notnull()]
+
 data['fecha reporte web'] = pd.to_datetime(data['fecha reporte web'],format="%d/%m/%Y %H:%M:%S")
 data['Fecha de notificación'] = pd.to_datetime(data['Fecha de notificación'],format="%d/%m/%Y %H:%M:%S")
 data['Fecha de muerte'] = pd.to_datetime(data['Fecha de muerte'],format="%d/%m/%Y %H:%M:%S")
 data['Fecha de recuperación'] = pd.to_datetime(data['Fecha de recuperación'],format="%d/%m/%Y %H:%M:%S")
 data['Fecha de diagnóstico'] = pd.to_datetime(data['Fecha de diagnóstico'],format="%d/%m/%Y %H:%M:%S")
+
+
+
+
+
+
 
 
 
@@ -131,10 +139,10 @@ data_tests['Cod_M'] = data_tests['Cod_M'].apply(lambda x : '0'+str(x) if ( len(s
 del add_code, data_pop, tests
 
 
+list(data_tests.columns)
 
 
-
-
+data_tests2 = data_tests.drop('ID de caso',axis=1).drop_duplicates()
 
 
 
@@ -146,9 +154,68 @@ del add_code, data_pop, tests
 ###############################################################################
 
 
+###############################################################################
+###############################################################################
+# MOBILITY
 
 
 
+#df = pd.read_csv(path0)
+
+mob = pd.read_csv('C:/Users/admin/Downloads/Global_Mobility_Report (9).csv')
+
+#list(df.columns)
+#list(mob.columns)
+mob['country_region'].drop_duplicates()
+
+
+mob = mob[mob['country_region']=='Colombia']
+
+mob.to_csv('C:/Users/admin/Downloads/COVID COLOMBIA/MOB_COL_210104.csv',index=False)
+#
+#mob = mob[mob['sub_region_2'].isnull()]
+#
+#
+#
+#mob = mob.drop(['country_region_code', 'country_region',
+# 'sub_region_2', 'metro_area', 'iso_3166_2_code',
+# 'census_fips_code'],axis=1)
+#
+#mob.columns =   ['country', 'dates',
+# 'retail_and_recreation', 'grocery_and_pharmacy',
+# 'parks', 'transit_stations', 'workplaces', 'residential']  
+#    
+#mob['country'] = mob['country'].str.upper()
+#mob['country'] = mob['country'].fillna('Todas en Peru')
+#
+##c_mob = mob['country'].drop_duplicates()
+##c_df = df['country'].drop_duplicates()
+#
+#
+#renaming = [['CALLAO REGION','CALLAO'],['METROPOLITAN MUNICIPALITY OF LIMA','LIMA'],['UNITED ARAB EMIRATES','UAE'],
+#           ['CAPE VERDE','CABO VERDE'],['MYANMAR (BURMA)','MYANMAR'],['SOUTH KOREA','S. KOREA'],
+#           ['THE BAHAMAS','BAHAMAS'],['CÔTE D\'IVOIRE','IVORY COAST'],['',''],['','']]
+#
+#
+#
+#for new_name in renaming:
+#    print(new_name[0],new_name[1])
+#    mob['country'] = mob['country'].replace(new_name[0],new_name[1])
+#
+#
+#mob = mob.rename(columns={'dates':'FECHA','country':'DEPARTAMENTO DOMICILIO'})
+#
+#
+#c_join = pd.merge(df, mob, how='left', on=['FECHA','DEPARTAMENTO DOMICILIO'])
+#
+#c_join.to_csv(path0,index=False)
+#
+#
+##del c_df, c_mob
+#del c_join, consecutive, df, mob, path1, renaming, new_name
+#
+#
+#
 
 
 
@@ -250,7 +317,13 @@ del cases, col, date, dates, deaths, dpto, dptos, name_d, new_cols, pop, pop_d, 
 
 print('\n\nUltimo registro: ',Ultimo_registro,  '\nTests hasta: ',Ultimo_test)
 
-data_tests.to_csv('C:/Users/admin/Downloads/COVID COLOMBIA/COVID_COL_201224.csv',index=False)
+
+
+
+
+
+
+data_tests.to_csv('C:/Users/admin/Downloads/COVID COLOMBIA/COVID_COL_210117.csv',index=False)
 
 del Ultimo_registro, Ultimo_test, data_tests
 
