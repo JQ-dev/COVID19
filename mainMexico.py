@@ -19,9 +19,9 @@ Created on Tue Nov 24 10:40:03 2020
 import pandas as pd
 
 
-file3 = 'C:/Users/admin/Downloads/210107COVID19MEXICO.csv'
+file3 = 'C:/Users/admin/Downloads/210301COVID19MEXICO.csv'
 
-version = '103'
+version = '128'
 path5 = 'C:/Users/admin/Downloads/Peru/Mexico_Hospital_'+version+'.csv'
 
 ###############################################################################
@@ -79,4 +79,32 @@ df_MX['EST'] = df_MX['CODE'].map(mx_code2)
 df_MX.to_csv(path5,index=False)
 
 
+
+
+
+
+mob = pd.read_csv('C:/Users/admin/Downloads/Global_Mobility_Report.csv',sep=',')
+
+
+mob.columns
+#Filter Countries
+mob = mob.loc[ mob['country_region_code'] == 'MX' , : ]
+
+# Rrmove region 2 and whole country
+#cond = mob.loc[:,'sub_region_1'].notna()
+#mob1 = mob1.loc[ cond , : ]
+#
+#cond = mob.loc[:,'sub_region_2'].isna()
+#mob1 = mob1.loc[ cond , : ]
+
+path5 = 'C:/Users/admin/Downloads/Peru/Mexico_Hospital_'+version+'_mob.csv'
+
+mob.to_csv(path5,index=False)
+
+
 del file3, version, path5, tests, mx_sexo, mx_munic, mx_code1, mx_code2, mx_paciente, mx_resultado
+
+
+
+
+

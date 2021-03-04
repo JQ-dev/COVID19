@@ -7,8 +7,9 @@ Created on Wed Oct 28 22:05:13 2020
 
 import pandas as pd 
 
-version = '101'
+version = '107'
 path0 = 'C:/Users/admin/Downloads/Peru/CovidIndia_'+version+'.csv'
+path1 = 'C:/Users/admin/Downloads/Peru/CovidIndia_mob_'+version+'.csv'
 
 i = 1
 raw_d = []
@@ -37,4 +38,18 @@ keep_col = ['Date Announced','Detected District','Detected State','Current Statu
 dfIndia = raw_all.loc[:,keep_col]
 
 dfIndia.to_csv(path0,index=False)
+
+
+mob = pd.read_csv('C:/Users/admin/Downloads/Global_Mobility_Report.csv',sep=',')
+
+
+#a = mob['country_region_code'].drop_duplicates()
+#Filter Countries
+mob = mob.loc[ mob['country_region_code'] == 'IN' , : ]
+
+
+
+mob.to_csv(path1,index=False)
+
+del mob
 

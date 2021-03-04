@@ -223,37 +223,36 @@ def db_to_file(last):
   
     
     
-    
-    database.loc[:,'dates'] = database.loc[:,'dates'].apply(lambda x : datetime.datetime.strptime( x +' 2020', '%b %d %Y') )
-    
+    #database.loc[:,'dates'] = database.loc[:,'dates'].apply(lambda x : datetime.datetime.strptime( '%b %d %Y') )
+    database.loc[:,'dates'] = pd.to_datetime(database.loc[:,'dates'])
 
 
-    database['diff'] = (database['dates'] - database['dates'].shift(periods=1)).apply(lambda x: x.days)
-    database['diff'] = database['diff'].fillna(1)
+#    database['diff'] = (database['dates'] - database['dates'].shift(periods=1)).apply(lambda x: x.days)
+#    database['diff'] = database['diff'].fillna(1)
     
     #database['dates2'] = database['dates'].copy()
 
 
-    mod_year = False
-    for row in range(1,len(database['dates'])-1):
-        diff = database['diff'].iloc[row+1]
-
-        if diff < 0:
-            mod_year = True
-            
-        if diff > 1:
-            mod_year = False            
-
-        if mod_year == True:
-            
-            try:
-                database['dates'].iloc[row+1] =  add_years(database['dates'].iloc[row+1], 1)
-                #print(diff)
-            except:
-                continue
-            
-        
-    database = database.drop(['diff'],axis=1)
+#    mod_year = False
+#    for row in range(1,len(database['dates'])-1):
+#        diff = database['diff'].iloc[row+1]
+#
+#        if diff < 0:
+#            mod_year = True
+#            
+#        if diff > 1:
+#            mod_year = False            
+#
+#        if mod_year == True:
+#            
+#            try:
+#                database['dates'].iloc[row+1] =  add_years(database['dates'].iloc[row+1], 1)
+#                #print(diff)
+#            except:
+#                continue
+#            
+#        
+#    database = database.drop(['diff'],axis=1)
     
 
     
@@ -298,20 +297,20 @@ def db_to_file(last):
 
 
     
-consecutive = '122'  
-last = '122'
+consecutive = '161' 
+last = '161'
 
 db_to_file(consecutive)
 
 
 
-
+ 
 
 ########################3
 
 df = pd.read_csv('C:/Users/admin/Downloads/Peru/Covid_worldometers' + consecutive + '.csv')
 
-mob = pd.read_csv('C:/Users/admin/Downloads/Global_Mobility_Report (10).csv')
+mob = pd.read_csv('C:/Users/admin/Downloads/Global_Mobility_Report.csv')
 
 list(df.columns)
 list(mob.columns)
@@ -323,7 +322,7 @@ mob = mob[mob['metro_area'].isnull()]
 
 mob = mob.drop(['country_region_code', 'sub_region_1',
  'sub_region_2', 'metro_area', 'iso_3166_2_code',
- 'census_fips_code'],axis=1)
+ 'census_fips_code','place_id'],axis=1)
 
 mob.columns =   ['country', 'dates',
  'retail_and_recreation', 'grocery_and_pharmacy',
@@ -342,13 +341,12 @@ renaming = [['UNITED KINGDOM','UK'],['UNITED STATES','USA'],['UNITED ARAB EMIRAT
 
 
 
-
 for new_name in renaming:
     print(new_name[0],new_name[1])
     mob['country'] = mob['country'].replace(new_name[0],new_name[1])
 
 
-c_join = pd.merge(df, mob, how='left', on=['country','dates'])
+c_join = pd.merge(df, mob, how='outer', on=['country','dates'])
 
 path1 = 'C:/Users/admin/Downloads/Peru/Covid_worldometers' + consecutive + '.csv'
 
@@ -356,40 +354,7 @@ c_join.to_csv(path1,index=False)
 
 
 #del c_df, c_mob
-del c_join, consecutive, df, mob, path1, renaming, new_name
-
-#
-#df_pop = pd.read_csv('C:/Users/admin/Downloads/Peru/Population_worldometers048.csv')
-#
-#
-#df0 = pd.merge(df,df_pop,left_on='country', right_on='Country')
-#del df, df_pop
-#
-#df0['Deaths/pop'] = df0['cum_deaths'] / df0['Population (2020)']
-#
-#
-## 1 /100.000 Cases
-#df0 = df0.loc[ df0['Deaths/pop'] > 0.0000001 ,:]
-#
-#
-#countries = df0['country'].drop_duplicates()
-#
-#
-#df0['new_date'] = pd.to_datetime(df0['dates'])
-#df0['days'] = 0
-#
-#pais = 'CHINA'
-#
-#for pais in countries:
-#    day_zero = df0.loc[ df0['country'] == pais ,'new_date'].min()
-#    df0.loc[ df0['country'] == pais , 'days'] = df0.loc[ df0['country'] == pais ,'new_date'] - day_zero
-#
-#
-#df0['days'] = df0['days'] / 86400000000000
-#
-#
-#df0.to_csv('C:/Users/admin/Downloads/Peru/COVID_Chile02.csv',index=False)
-
+del c_join, consecutive, df, mob, path1, renaming, new_name, last
 
 
 

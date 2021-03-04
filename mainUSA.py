@@ -42,35 +42,44 @@ us_states.to_csv('us_states.csv')
 ################################################################################
 
 
-url1 = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv"
-url2 = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/c8bfc4b23ba4acaa011bc76e67cc527937155bda/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv"
-url3 = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/c8bfc4b23ba4acaa011bc76e67cc527937155bda/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv"
+
+
+
+
+
+
+
+
+
+url1 = "https://github.com/CSSEGISandData/COVID-19/raw/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv"
+url2 = "https://github.com/CSSEGISandData/COVID-19/raw/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv"
+#url3 = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/c8bfc4b23ba4acaa011bc76e67cc527937155bda/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv"
 
 
 c = pd.read_csv(url1)
 d = pd.read_csv(url2)
-r = pd.read_csv(url3)
+#r = pd.read_csv(url3)
 
 dates = list(c.columns[4:])
 no_dates = list(c.columns[:4])
 
 con = pd.melt(c, id_vars=no_dates, var_name='date', value_name='total')
 dea = pd.melt(d, id_vars=no_dates, var_name='date', value_name='total')
-rec = pd.melt(r, id_vars=no_dates, var_name='date', value_name='total')
+#rec = pd.melt(r, id_vars=no_dates, var_name='date', value_name='total')
 
 con['condition'] = "Confirmed"
 dea['condition'] = "Deaths"
-rec['condition'] = "Recovered"
+#rec['condition'] = "Recovered"
 
 
 con = con.fillna('')
 dea = dea.fillna('')
-rec = rec.fillna('')
+#rec = rec.fillna('')
 
 
 con.index = con.iloc[:,1]+'-'+con.iloc[:,0]
 dea.index = dea.iloc[:,1]+'-'+dea.iloc[:,0]
-rec.index = rec.iloc[:,1]+'-'+rec.iloc[:,0]
+#rec.index = rec.iloc[:,1]+'-'+rec.iloc[:,0]
 
 
 naming = pd.concat ( [con.iloc[:,:4] , dea.iloc[:,:4] , rec.iloc[:,:4]] ).drop_duplicates()
@@ -145,10 +154,77 @@ naming_US = naming.loc[ naming.loc[ : ,'Country'] == 'US' ,  ]
 
 
 
-total_US.to_csv('US_covid-19_data201228.csv')
+total_US.to_csv('US_covid-19_data210122.csv')
 #naming_US.to_csv('US_covid-19_names.csv')
 
 
 del total_US,naming_US, total
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import pandas as pd
+#import datetime as dt
+
+us_groups = pd.read_csv('C:/Users/admin/Downloads/CRDT Data - CRDT (2).csv')
+
+us_groups['Date'] = pd.to_datetime(us_groups['Date'],format='%Y%m%d')
+
+#us_groups['day_of_week'] =  us_groups['Date'].dt.day_name()
+
+#us_groups = us_groups[us_groups['day_of_week']=='Sunday']
+#us_groups = us_groups.drop('day_of_week',axis=1)
+
+
+us_groups = us_groups.fillna(0)
+
+
+
+
+
+
+us_groups1 = pd.melt(us_groups,id_vars=['Date','State'],value_name='Value',var_name='Measure')
+
+us_groups1['Subgroup'] = us_groups1['Measure'].str.split("_", n = 1, expand = True)[1]
+us_groups1['Measure'] = us_groups1['Measure'].str.split("_", n = 1, expand = True)[0]
+
+
+
+
+us_groups2 = us_groups1.pivot_table(index=['Date'],columns=['Measure','State','Subgroup'],values='Value').reset_index()
+
+
+us_groups2.iloc[:,1:] = us_groups2.iloc[:,1:].diff()
+
+
+
+
+us_groups3 = pd.melt(us_groups2,id_vars=['Date'])
+
+
+#us_groups3 = pd.melt(us_groups2,id_vars=['Date','State'],value_name='Value',var_name='Measure')
+
+
+us_groups3.to_csv('C:/Users/admin/Downloads/Peru/Ethnic__United_States_02_28b.csv',index=False)
+
+
+
+
+
+
+
+
+
 
 

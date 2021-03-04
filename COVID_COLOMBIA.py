@@ -37,11 +37,6 @@ data['Fecha de diagnóstico'] = pd.to_datetime(data['Fecha de diagnóstico'],for
 
 
 
-
-
-
-
-
 '''
 ['fecha reporte web',
  'ID de caso',
@@ -147,6 +142,14 @@ data_tests2 = data_tests.drop('ID de caso',axis=1).drop_duplicates()
 
 
 
+print('\n\nUltimo registro: ',Ultimo_registro,  '\nTests hasta: ',Ultimo_test)
+
+
+
+
+data_tests2.to_csv('C:/Users/admin/Downloads/COVID COLOMBIA/COVID_COL_210222.csv',index=False)
+
+del Ultimo_registro, Ultimo_test, data_tests
 
 
 ###############################################################################
@@ -154,44 +157,150 @@ data_tests2 = data_tests.drop('ID de caso',axis=1).drop_duplicates()
 ###############################################################################
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ###############################################################################
 ###############################################################################
-# MOBILITY
+# SUMMARIZE AND ADD MOBILITY
+
+
+df = pd.read_csv('C:/Users/admin/Downloads/COVID COLOMBIA/COVID_COL_210222.csv')
+
+# Removing useless columns
+list(df.columns)
+
+remove_col = ['COD_dpto',
+ 'Cod_D',
+ 'Cod_M',
+ 'Código DIVIPOLA',
+ 'Código DIVIPOLA departamento',
+ 'Código ISO del país',
+ 'Edad',
+ 'Estado',
+ 'Fecha',
+ 'Fecha de diagnóstico',
+ 'Fecha de inicio de síntomas',
+ 'Fecha de notificación',
+ 'Fecha de recuperación',
+ 'ID de caso',
+ 'MUNICIPIO',
+ 'Nombre del grupo étnico',
+ 'Nombre del país',
+ 'Pertenencia étnica',
+ 'Recuperado',
+ 'Sexo',
+ 'Tipo de contagio',
+ 'Tipo de recuperación',
+ 'Ubicación del caso',
+ 'Unidad de medida de edad',
+ 'test_Dpto_total',
+ 'test_Pais_dia',
+ 'test_Pais_total',
+ 'DPTO',
+ 'Poblacion']
+
+df = df.drop(remove_col , axis=1, errors='ignore')
+del remove_col
+
+# Cases 
+
+df1 = df.copy()
+
+df1['Cases'] = 1
+
+df1 = df1.drop(['Fecha de muerte'] , axis=1)
+
+df1['Nombre departamento'] = df1['Nombre departamento'].replace('STA MARTA D.E.','MAGDALENA').replace('BARRANQUILLA','ATLANTICO').replace('CARTAGENA','BOLIVAR')
+
+
+df1 = df1.groupby(['Nombre departamento',
+ 'Pobl_dep','fecha reporte web']).agg({'Cases':'sum','test_Dpto_dia':'max'}).reset_index()
+
+df1['Nombre departamento'].drop_duplicates()
+
+
+df1 = df1.rename(columns={'fecha reporte web':'Date'})
+
+
+
+# Deaths
+
+df2 = df.copy()
+df2['Deaths'] = 1
+
+df2 = df2.drop(['fecha reporte web'] , axis=1)
+
+df2 = df2[df2['Fecha de muerte'].notnull()]
+
+df2['Nombre departamento'] = df2['Nombre departamento'].replace('STA MARTA D.E.','MAGDALENA').replace('BARRANQUILLA','ATLANTICO').replace('CARTAGENA','BOLIVAR')
+
+
+df2 = df2.groupby(['Nombre departamento','Pobl_dep','Fecha de muerte']).agg({'Deaths':'sum','test_Dpto_dia':'max'}).reset_index()
+
+df2 = df2.rename(columns={'Fecha de muerte':'Date'})
+
+df2 = df2.drop('test_Dpto_dia' , axis=1)
+
+df0 = pd.merge(df1,df2,how='outer',on=['Nombre departamento','Pobl_dep','Date'])
+
+df0['Nombre departamento'].drop_duplicates()
 
 
 
 #df = pd.read_csv(path0)
 
-mob = pd.read_csv('C:/Users/admin/Downloads/Global_Mobility_Report (9).csv')
-
-#list(df.columns)
-#list(mob.columns)
-mob['country_region'].drop_duplicates()
-
+mob = pd.read_csv('C:/Users/admin/Downloads/Global_Mobility_Report.csv')
 
 mob = mob[mob['country_region']=='Colombia']
+#list(df.columns)
+#list(mob.columns)
 
-mob.to_csv('C:/Users/admin/Downloads/COVID COLOMBIA/MOB_COL_210104.csv',index=False)
+mob = mob[mob['sub_region_2'].isnull()]
+mob = mob[mob['sub_region_1'].notnull()]
+
+
+
+#mob.to_csv('C:/Users/admin/Downloads/COVID COLOMBIA/MOB_COL_210104.csv',index=False)
 #
-#mob = mob[mob['sub_region_2'].isnull()]
-#
-#
-#
-#mob = mob.drop(['country_region_code', 'country_region',
-# 'sub_region_2', 'metro_area', 'iso_3166_2_code',
-# 'census_fips_code'],axis=1)
-#
-#mob.columns =   ['country', 'dates',
-# 'retail_and_recreation', 'grocery_and_pharmacy',
-# 'parks', 'transit_stations', 'workplaces', 'residential']  
-#    
-#mob['country'] = mob['country'].str.upper()
-#mob['country'] = mob['country'].fillna('Todas en Peru')
-#
-##c_mob = mob['country'].drop_duplicates()
-##c_df = df['country'].drop_duplicates()
-#
-#
+
+
+
+mob = mob.drop(['country_region_code', 'country_region',
+ 'sub_region_2', 'metro_area', 'iso_3166_2_code',
+ 'census_fips_code','place_id'],axis=1)
+
+mob.columns =   ['Dpto', 'Date',
+ 'retail_and_recreation', 'grocery_and_pharmacy',
+ 'parks', 'transit_stations', 'workplaces', 'residential']  
+  
+
+
+  
+mob['Dpto'] = mob['Dpto'].str.upper()
+
+mob['Dpto'].drop_duplicates()
+
+mob['Dpto'] = mob['Dpto'].replace('NORTH SANTANDER','NORTE SANTANDER').replace('SAN ANDRES AND PROVIDENCIA','SAN ANDRES')
+
+mob['Dpto'] = mob['Dpto'].replace('LA GUAJIRA','GUAJIRA').replace('VALLE DEL CAUCA','VALLE').replace('NARINO','NARIÑO')
+
+mob = mob.rename(columns={'Dpto':'Nombre departamento'})
+
 #renaming = [['CALLAO REGION','CALLAO'],['METROPOLITAN MUNICIPALITY OF LIMA','LIMA'],['UNITED ARAB EMIRATES','UAE'],
 #           ['CAPE VERDE','CABO VERDE'],['MYANMAR (BURMA)','MYANMAR'],['SOUTH KOREA','S. KOREA'],
 #           ['THE BAHAMAS','BAHAMAS'],['CÔTE D\'IVOIRE','IVORY COAST'],['',''],['','']]
@@ -206,9 +315,47 @@ mob.to_csv('C:/Users/admin/Downloads/COVID COLOMBIA/MOB_COL_210104.csv',index=Fa
 #mob = mob.rename(columns={'dates':'FECHA','country':'DEPARTAMENTO DOMICILIO'})
 #
 #
-#c_join = pd.merge(df, mob, how='left', on=['FECHA','DEPARTAMENTO DOMICILIO'])
+c_join = pd.merge(df0, mob, how='right', on=['Date','Nombre departamento'])
 #
-#c_join.to_csv(path0,index=False)
+
+
+
+dfIV = pd.read_csv('C:/Users/admin/Downloads/COVID COLOMBIA/Mercado Ivermectina Colombia.csv')
+
+
+list(dfIV.columns)
+
+dfIV = dfIV[ dfIV['Variable'] == 'Unidades' ]
+
+
+remove_col = ['Region',
+ 'Laboratorio',
+ 'Producto',
+ 'Tipo Mercado',
+ 'Tipo Producto',
+ 'CT IV',
+ 'Presentacion',
+ 'Forma Farmacéutica',
+ 'FACTOR',
+ 'FF III',
+ 'Variable']
+
+dfIV = dfIV.drop(remove_col , axis=1)
+del remove_col
+
+
+
+
+dfIV = dfIV.groupby(['Departamento','Mes']).sum().reset_index()
+dfIV.to_csv(('C:/Users/admin/Downloads/COVID COLOMBIA/COVID_COL_2020IVM.csv'),index=False)
+#
+
+
+
+
+
+
+c_join.to_csv(('C:/Users/admin/Downloads/COVID COLOMBIA/COVID_COL_210222b.csv'),index=False)
 #
 #
 ##del c_df, c_mob
@@ -220,112 +367,6 @@ mob.to_csv('C:/Users/admin/Downloads/COVID COLOMBIA/MOB_COL_210104.csv',index=Fa
 
 
 
-
-'''
-###############################################################################
-###############################################################################
-
-import pandas as pd
-import numpy as np
-
-
-#total = pd.read_csv('https://www.datos.gov.co/api/views/gt2j-8ykr/rows.csv?accessType=DOWNLOAD')
-total = data.copy()
-
-
-total = total.rename(columns={'Código DIVIPOLA municipio':'Código DIVIPOLA'})
-
-total['Fecha de muerte'] = total['Fecha de muerte'].fillna(0)
-total['Código DIVIPOLA'] = total['Código DIVIPOLA'].replace(5,5001)
-total['COD_D'] = total['Código DIVIPOLA'].apply(lambda x : np.floor(x/1000) )
-
-
-deaths = total.loc[ (total.loc[:,'Fecha de muerte'] != 0) ,('COD_D','Fecha de muerte')]
-deaths['DEATHS'] = 1  
-deaths = deaths.rename(columns={'Fecha de muerte':'DATE'})
-
-deaths = deaths.groupby(['COD_D','DATE']).count().reset_index()
-
-#list(deaths.columns)
-#list(total.columns)
-cases = total.loc[ : ,('COD_D','Fecha de inicio de síntomas')]
-cases['CASES'] = 1   
-cases = cases.rename(columns={'Fecha de inicio de síntomas':'DATE'})
-cases = cases.loc[ cases.loc[:,'DATE']!= 'Asintomático' , :]
-
-
-cases = cases.groupby(['COD_D','DATE']).count().reset_index()
-
-total = pd.merge(cases,deaths,how='outer',on=['COD_D','DATE'])
-
-total = total.fillna(0)
-
-#total['DATE'] = pd.to_datetime( total['DATE'] )
-
-
-dates = total['DATE'].drop_duplicates()
-dptos = total['COD_D'].drop_duplicates()
-
-
-for dpto in dptos:
-    for date in dates:
-        if date not in list(total.loc[ total.loc[:,'COD_D'] == dpto ,'DATE']):
-            temp = pd.DataFrame([[dpto,date,0,0]], columns=list(total.columns))
-            total = total.append(temp)
-        else:
-            continue
-
-
-#list(database.columns)
-
-
-
-
-for dpto in dptos:
-    #dpto = dptos[0]
-    temp = total.loc[ total.loc[:,'COD_D']==dpto ,['CASES','DEATHS','DATE']]
-    
-    new_cols = [['CASES','cum_cases'],['DEATHS','cum_deaths']]
-    #col = ['CASES','cum_cases']
-    for col in new_cols:
-        temp = total.loc[ total.loc[:,'COD_D']==dpto ,[col[0],'DATE']].sort_values(by=['DATE'])
-        
-        temp_dict = dict(zip( temp['DATE'] , np.cumsum(temp[col[0]]) ))
-        
-        total.loc[ total.loc[:,'COD_D']==dpto ,col[1]] = total.loc[ total.loc[:,'COD_D']==dpto ,'DATE'].map(temp_dict)
-
-
-
-
-pop = pd.read_csv('C:/Users/admin/Downloads/COVID COLOMBIA/Pop_Col.csv')
-
-name_d = dict(zip(pop['COD_dpto'],pop['DPTO']))
-pop_d = dict(zip(pop['COD_dpto'],pop['Pobl_dep']))
-
-
-
-total['Pop']  =  total['COD_D'].map(pop_d)
-total['State'] = total['COD_D'].map(name_d)
-
-COVID_COL = total.drop(['COD_D'],axis=1)
-
-
-COVID_COL.to_csv('C:/Users/admin/Downloads/Peru/Colombia_COVID_99.csv',index=False)
-
-del cases, col, date, dates, deaths, dpto, dptos, name_d, new_cols, pop, pop_d, temp, temp_dict, total
-'''
-
-print('\n\nUltimo registro: ',Ultimo_registro,  '\nTests hasta: ',Ultimo_test)
-
-
-
-
-
-
-
-data_tests.to_csv('C:/Users/admin/Downloads/COVID COLOMBIA/COVID_COL_210117.csv',index=False)
-
-del Ultimo_registro, Ultimo_test, data_tests
 
 
 
