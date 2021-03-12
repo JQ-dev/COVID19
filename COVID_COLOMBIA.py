@@ -147,7 +147,7 @@ print('\n\nUltimo registro: ',Ultimo_registro,  '\nTests hasta: ',Ultimo_test)
 
 
 
-data_tests2.to_csv('C:/Users/admin/Downloads/COVID COLOMBIA/COVID_COL_210222.csv',index=False)
+data_tests2.to_csv('C:/Users/admin/Downloads/COVID COLOMBIA/COVID_COL_210304.csv',index=False)
 
 del Ultimo_registro, Ultimo_test, data_tests
 
@@ -179,7 +179,7 @@ del Ultimo_registro, Ultimo_test, data_tests
 # SUMMARIZE AND ADD MOBILITY
 
 
-df = pd.read_csv('C:/Users/admin/Downloads/COVID COLOMBIA/COVID_COL_210222.csv')
+df = pd.read_csv('C:/Users/admin/Downloads/COVID COLOMBIA/COVID_COL_210304.csv')
 
 # Removing useless columns
 list(df.columns)
@@ -355,7 +355,7 @@ dfIV.to_csv(('C:/Users/admin/Downloads/COVID COLOMBIA/COVID_COL_2020IVM.csv'),in
 
 
 
-c_join.to_csv(('C:/Users/admin/Downloads/COVID COLOMBIA/COVID_COL_210222b.csv'),index=False)
+c_join.to_csv(('C:/Users/admin/Downloads/COVID COLOMBIA/COVID_COL_210304b.csv'),index=False)
 #
 #
 ##del c_df, c_mob

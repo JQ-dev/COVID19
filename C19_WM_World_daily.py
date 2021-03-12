@@ -289,7 +289,9 @@ def db_to_file(last):
     path1 = 'C:/Users/admin/Downloads/Peru/Covid_worldometers' + last + '.csv'
     path2 = 'C:/Users/admin/Downloads/Peru/Population_worldometers' + last + '.csv'
     
-    database.to_csv(path1,index=False)
+    return database, last
+    
+    #database.to_csv(path1,index=False)
     #pop.to_csv(path2,index=False)
 
 
@@ -297,10 +299,16 @@ def db_to_file(last):
 
 
     
-consecutive = '161' 
-last = '161'
+consecutive = '166' 
+#last = '164'
 
-db_to_file(consecutive)
+#db_to_file(consecutive)
+
+
+
+
+
+
 
 
 
@@ -308,7 +316,30 @@ db_to_file(consecutive)
 
 ########################3
 
-df = pd.read_csv('C:/Users/admin/Downloads/Peru/Covid_worldometers' + consecutive + '.csv')
+#df = pd.read_csv('C:/Users/admin/Downloads/Peru/Covid_worldometers' + consecutive + '.csv')
+
+df, consecutive = db_to_file(consecutive)
+
+
+dates = df[['dates',]].drop_duplicates()
+
+last_index = dates.index[-1]
+
+countries = df[['country']].drop_duplicates()
+
+countries.index = range(last_index,last_index+countries.shape[0])
+
+countries['key'] = 1
+dates['key'] = 1
+
+
+df_base = pd.merge(countries, dates, on='key').drop('key',1)
+
+
+df = pd.merge(df, df_base,how='right', on=['country','dates'])
+
+df = df.fillna(0)
+
 
 mob = pd.read_csv('C:/Users/admin/Downloads/Global_Mobility_Report.csv')
 
@@ -345,6 +376,8 @@ for new_name in renaming:
     print(new_name[0],new_name[1])
     mob['country'] = mob['country'].replace(new_name[0],new_name[1])
 
+mob['dates'] = pd.to_datetime(mob['dates'])
+
 
 c_join = pd.merge(df, mob, how='outer', on=['country','dates'])
 
@@ -354,7 +387,7 @@ c_join.to_csv(path1,index=False)
 
 
 #del c_df, c_mob
-del c_join, consecutive, df, mob, path1, renaming, new_name, last
+del c_join, consecutive, df, mob, path1, renaming, new_name, dates, countries, last_index, df_base
 
 
 

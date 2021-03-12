@@ -73,6 +73,6 @@ df_main = df_main.fillna(0)
 df_main = df_main.drop(['index'],axis=1)
 
 
-df_main.to_csv('C:/Users/admin/Downloads/Peru/COVID_ARG_210205.csv',index=False)
+df_main.to_csv('C:/Users/admin/Downloads/Peru/COVID_ARG_210311.csv',index=False)
 
 del cond, df

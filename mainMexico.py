@@ -19,9 +19,9 @@ Created on Tue Nov 24 10:40:03 2020
 import pandas as pd
 
 
-file3 = 'C:/Users/admin/Downloads/210301COVID19MEXICO.csv'
+file3 = 'C:/Users/admin/Downloads/210306COVID19MEXICO.csv'
 
-version = '128'
+version = '129'
 path5 = 'C:/Users/admin/Downloads/Peru/Mexico_Hospital_'+version+'.csv'
 
 ###############################################################################
@@ -41,7 +41,7 @@ df_MX['CODE'] = df_MX['ENTIDAD_RES']*1000 + df_MX['MUNICIPIO_RES']
 df_MX = df_MX.loc[:,['CODE','SEXO','TIPO_PACIENTE','RESULTADO_LAB','FECHA_INGRESO','FECHA_SINTOMAS',
                      'FECHA_DEF','INTUBADO','NEUMONIA','EDAD','EMBARAZO','DIABETES','EPOC','ASMA','INMUSUPR',
                      'HIPERTENSION','OTRA_COM','CARDIOVASCULAR','OBESIDAD','RENAL_CRONICA','TABAQUISMO',
-                     'OTRO_CASO','UCI','PAIS_ORIGEN']]
+                     'OTRO_CASO','UCI','PAIS_ORIGEN','SECTOR']]
 
 # Dict to assigne names
 mx_sexo = {1:'Mujer',2:'Hombre',99:'N/A'}
