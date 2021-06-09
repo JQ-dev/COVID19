@@ -19,9 +19,9 @@ Created on Tue Nov 24 10:40:03 2020
 import pandas as pd
 
 
-file3 = 'C:/Users/admin/Downloads/210306COVID19MEXICO.csv'
+file3 = 'C:/Users/admin/Downloads/210601COVID19MEXICO.csv'
 
-version = '129'
+version = '157'
 path5 = 'C:/Users/admin/Downloads/Peru/Mexico_Hospital_'+version+'.csv'
 
 ###############################################################################
@@ -37,11 +37,12 @@ tests = tests.groupby(['FECHA_INGRESO','ENTIDAD_RES','MUNICIPIO_RES','RESULTADO_
 # Creating unique code
 df_MX['CODE'] = df_MX['ENTIDAD_RES']*1000 + df_MX['MUNICIPIO_RES']
 
+
+
 # Useless columns test removal + new ones
 df_MX = df_MX.loc[:,['CODE','SEXO','TIPO_PACIENTE','RESULTADO_LAB','FECHA_INGRESO','FECHA_SINTOMAS',
-                     'FECHA_DEF','INTUBADO','NEUMONIA','EDAD','EMBARAZO','DIABETES','EPOC','ASMA','INMUSUPR',
-                     'HIPERTENSION','OTRA_COM','CARDIOVASCULAR','OBESIDAD','RENAL_CRONICA','TABAQUISMO',
-                     'OTRO_CASO','UCI','PAIS_ORIGEN','SECTOR']]
+                     'FECHA_DEF','INTUBADO','NEUMONIA','EDAD','DIABETES',
+                     'HIPERTENSION','OBESIDAD','UCI','SECTOR']]
 
 # Dict to assigne names
 mx_sexo = {1:'Mujer',2:'Hombre',99:'N/A'}
@@ -102,9 +103,9 @@ path5 = 'C:/Users/admin/Downloads/Peru/Mexico_Hospital_'+version+'_mob.csv'
 mob.to_csv(path5,index=False)
 
 
-del file3, version, path5, tests, mx_sexo, mx_munic, mx_code1, mx_code2, mx_paciente, mx_resultado
+del file3, version, path5, tests, mx_sexo, mx_munic, mx_code1, mx_code2, mx_paciente, mx_resultado, df_MX
 
 
-
+del mob
 
 

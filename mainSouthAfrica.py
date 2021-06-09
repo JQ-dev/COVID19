@@ -8,7 +8,7 @@ Created on Mon Jan 25 13:19:52 2021
 import pandas as pd
 
 
-link = 'C:/Users/admin/Downloads/Peru/COVID_SouthAfrica_210224.csv'
+link = 'C:/Users/admin/Downloads/Peru/COVID_SouthAfrica_210603.csv'
 
 url1 = "https://github.com/dsfsi/covid19za/raw/master/data/covid19za_provincial_cumulative_timeline_deaths.csv"
 url2 = "https://github.com/dsfsi/covid19za/raw/master/data/covid19za_provincial_cumulative_timeline_confirmed.csv"

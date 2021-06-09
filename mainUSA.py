@@ -82,7 +82,7 @@ dea.index = dea.iloc[:,1]+'-'+dea.iloc[:,0]
 #rec.index = rec.iloc[:,1]+'-'+rec.iloc[:,0]
 
 
-naming = pd.concat ( [con.iloc[:,:4] , dea.iloc[:,:4] , rec.iloc[:,:4]] ).drop_duplicates()
+naming = pd.concat ( [con.iloc[:,:4] , dea.iloc[:,:4] ] ).drop_duplicates()
 naming = naming.reset_index()
 
 naming['Country'] = naming['index'].str.split('-', n = 1, expand = True).iloc[:,0]
@@ -154,7 +154,7 @@ naming_US = naming.loc[ naming.loc[ : ,'Country'] == 'US' ,  ]
 
 
 
-total_US.to_csv('US_covid-19_data210122.csv')
+total_US.to_csv('US_covid-19_data210518.csv')
 #naming_US.to_csv('US_covid-19_names.csv')
 
 
@@ -177,7 +177,7 @@ del total_US,naming_US, total
 import pandas as pd
 #import datetime as dt
 
-us_groups = pd.read_csv('C:/Users/admin/Downloads/CRDT Data - CRDT (2).csv')
+us_groups = pd.read_csv('C:/Users/admin/Downloads/CRDT Data - CRDT (1).csv')
 
 us_groups['Date'] = pd.to_datetime(us_groups['Date'],format='%Y%m%d')
 
@@ -216,7 +216,7 @@ us_groups3 = pd.melt(us_groups2,id_vars=['Date'])
 #us_groups3 = pd.melt(us_groups2,id_vars=['Date','State'],value_name='Value',var_name='Measure')
 
 
-us_groups3.to_csv('C:/Users/admin/Downloads/Peru/Ethnic__United_States_02_28b.csv',index=False)
+us_groups3.to_csv('C:/Users/admin/Downloads/Peru/Ethnic__United_States_04_30b.csv',index=False)
 
 
 
@@ -224,6 +224,37 @@ us_groups3.to_csv('C:/Users/admin/Downloads/Peru/Ethnic__United_States_02_28b.cs
 
 
 
+
+
+import pandas as pd
+#import datetime as dt
+
+cdc = pd.read_csv('C:/Users/admin/Downloads/COVID-19_Case_Surveillance_Public_Use_Data (1).csv')
+
+a = cdc.head(100)
+
+
+cdc = cdc.drop(['cdc_case_earliest_dt ' ,'cdc_report_dt','pos_spec_dt'],axis=1)
+
+cdc = cdc[cdc['onset_dt'].notna()]
+
+cdc = cdc[cdc['death_yn'] != 'Missing']
+
+cdc['count'] = 1
+
+columns = list(cdc.columns)[:-1]
+
+columns =['onset_dt',
+ 'age_group',
+ 'race_ethnicity_combined',
+ 'hosp_yn',
+ 'icu_yn',
+ 'death_yn']
+
+cdc2 = cdc.groupby(columns).sum().reset_index()
+
+
+cdc2.to_csv('C:/Users/admin/Downloads/Peru/CDC__United_States_05_19.csv',index=False)
 
 
 

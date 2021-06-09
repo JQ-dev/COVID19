@@ -8,8 +8,8 @@ Created on Mon Jan 25 13:19:52 2021
 import pandas as pd
 
 
-link = 'C:/Users/admin/Downloads/Peru/COVID_Ecuador_210303d.csv'
-link2 = 'C:/Users/admin/Downloads/Peru/COVID_Ecuador_mob__210303d.csv'
+link = 'C:/Users/admin/Downloads/Peru/COVID_Ecuador_210406.csv'
+link2 = 'C:/Users/admin/Downloads/Peru/COVID_Ecuador_mob__210406.csv'
 
 #url3 = "https://github.com/dsfsi/covid19za/raw/master/data/covid19za_timeline_testing.csv"
 
