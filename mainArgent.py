@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Oct 18 12:29:49 2020
 
-@author: admin
-"""
 
 import pandas as pd
 import numpy as np
@@ -52,7 +47,7 @@ df_deaths['index'] = df_deaths['departamento'] + df_deaths['provincia'] +df_deat
 #classif = df['clasificacion_resumen'].drop_duplicates()
 #df['fecha_fallecimiento'].drop_duplicates()
 
-25*239
+
 
 df_main = df.loc[:,['clasif','departamento','provincia', 'fecha_apertura',]].drop_duplicates()
 
@@ -73,6 +68,6 @@ df_main = df_main.fillna(0)
 df_main = df_main.drop(['index'],axis=1)
 
 
-df_main.to_csv('C:/Users/admin/Downloads/Peru/COVID_ARG_210531.csv',index=False)
+df_main.to_csv('C:/Users/admin/Downloads/Peru/COVID_ARG_020921.csv',index=False)
 
 del cond, df

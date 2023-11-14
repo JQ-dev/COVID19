@@ -1,34 +1,22 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Nov 24 10:40:03 2020
-
-@author: admin
-"""
-
-
-###############################################################################
-###############################################################################
-###############################################################################
-
-
-
-
-#    MEXICO
 
 
 import pandas as pd
 
 
-file3 = 'C:/Users/admin/Downloads/210601COVID19MEXICO.csv'
 
-version = '157'
-path5 = 'C:/Users/admin/Downloads/Peru/Mexico_Hospital_'+version+'.csv'
+file3 = 'D:/211108COVID19MEXICO.csv'
+
+version = '202'
+path5 = 'D:/Mexico_Hospital_'+version+'.csv'
 
 ###############################################################################
 ###############################################################################
 
 df_MX = pd.read_csv(file3,engine='python')
 list(df_MX.columns)
+
+
+
 # Only tests data
 tests = df_MX.loc[:,['FECHA_INGRESO','ENTIDAD_RES','MUNICIPIO_RES','RESULTADO_LAB']]
 tests['tests'] = 1
@@ -41,8 +29,7 @@ df_MX['CODE'] = df_MX['ENTIDAD_RES']*1000 + df_MX['MUNICIPIO_RES']
 
 # Useless columns test removal + new ones
 df_MX = df_MX.loc[:,['CODE','SEXO','TIPO_PACIENTE','RESULTADO_LAB','FECHA_INGRESO','FECHA_SINTOMAS',
-                     'FECHA_DEF','INTUBADO','NEUMONIA','EDAD','DIABETES',
-                     'HIPERTENSION','OBESIDAD','UCI','SECTOR']]
+                     'FECHA_DEF','EDAD','UCI','SECTOR']]
 
 # Dict to assigne names
 mx_sexo = {1:'Mujer',2:'Hombre',99:'N/A'}
@@ -81,6 +68,16 @@ df_MX.to_csv(path5,index=False)
 
 
 
+# Basic MEXICO
+#
+#cases = pd.read_csv('C:/Users/admin/Downloads/Casos_Diarios_Estado_Nacional_Confirmados_20210727.csv')
+#deaths =  pd.read_csv('C:/Users/admin/Downloads/Casos_Diarios_Estado_Nacional_Defunciones_20210727.csv')
+#
+#cases = cases.drop(['cve_ent'],axis=1)
+#cases = cases.set_index()
+
+
+
 
 
 
@@ -98,7 +95,7 @@ mob = mob.loc[ mob['country_region_code'] == 'MX' , : ]
 #cond = mob.loc[:,'sub_region_2'].isna()
 #mob1 = mob1.loc[ cond , : ]
 
-path5 = 'C:/Users/admin/Downloads/Peru/Mexico_Hospital_'+version+'_mob.csv'
+path5 = 'D:/Mexico_Hospital_'+version+'_mob.csv'
 
 mob.to_csv(path5,index=False)
 

@@ -286,8 +286,8 @@ def db_to_file(last):
     
     del table, temp, temp_dict, countries
     
-    path1 = 'C:/Users/admin/Downloads/Peru/Covid_worldometers' + last + '.csv'
-    path2 = 'C:/Users/admin/Downloads/Peru/Population_worldometers' + last + '.csv'
+    path1 = 'D:/COVID/Covid_worldometers' + last + '.csv'
+    path2 = 'D:/COVID/Population_worldometers' + last + '.csv'
     
     return database, last
     
@@ -295,20 +295,11 @@ def db_to_file(last):
     #pop.to_csv(path2,index=False)
 
 
-
-
-
     
-consecutive = '219' 
+consecutive = '500' 
 #last = '164'
 
 #db_to_file(consecutive)
-
-
-
-
-
-
 
 
 
@@ -341,7 +332,7 @@ df = pd.merge(df, df_base,how='right', on=['country','dates'])
 df = df.fillna(0)
 
 
-mob = pd.read_csv('C:/Users/admin/Downloads/Global_Mobility_Report.csv')
+mob = pd.read_csv('D:/COVID/Global_Mobility_Report.csv')
 
 list(df.columns)
 list(mob.columns)
@@ -381,14 +372,13 @@ mob['dates'] = pd.to_datetime(mob['dates'])
 
 c_join = pd.merge(df, mob, how='outer', on=['country','dates'])
 
-path1 = 'C:/Users/admin/Downloads/Peru/Covid_worldometers' + consecutive + '.csv'
+path1 = 'D:/COVID/Covid_worldometers' + consecutive + '.csv'
 
 c_join.to_csv(path1,index=False)
 
 
 #del c_df, c_mob
 del c_join, consecutive, df, mob, path1, renaming, new_name, dates, countries, last_index, df_base
-
 
 
 

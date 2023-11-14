@@ -6,13 +6,49 @@ Created on Thu Jul 16 10:38:34 2020
 """
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-
 
  
- 
+dfinal = pd.DataFrame()
+
+files = ['mg1.csv','mg2.csv','mg3.csv','mg4.csv','mg5.csv','mg6.csv']
+
+#file = 'mg6.csv'
+
+for file in files:
+
+    file_name = 'C:/Users/admin/Downloads/' +  file
+    
+    df = pd.read_csv(file_name, sep=';')
+    
+    a = df.head(100)
+    df.columns
+    
+    cond = ( (df.dataColetaTeste1 > '2021-03-22' ) & 
+             (df.dataColetaTeste1 < '2021-08-27' ) & 
+             (df.classificacaoFinal == 'Confirmado Laboratorial') )
+    
+    df0 = df.loc[cond,:]
+    
+    cond = df0.municipioNotificacao.apply( lambda x : x in ('Ibirité','Ibirite','Sete Lagoas',
+                                                           'Betim','Santa Luzia','Nova Lima',
+                                                           'Montes Claros','Brumadinho','Governador Valadares',
+                                                           'Ouro Preto','Sabará','Contagem','Belo Horizonte') )
+    
+    df0 = df0.loc[cond,:]
+
+    dfinal = dfinal.append(df0)
+    
+    print(file, ' OK')
 
 
+
+dfinal.to_csv('C:/Users/admin/Downloads/MinasGeraisIVM.csv')
+
+
+file_name = 'C:/Users/admin/Downloads/' +  files[4]
+df = pd.read_csv(file_name, sep=';')
+
+mun  = df.municipioNotificacao.drop_duplicates()
 
 #states = ['pa','ap','ce','sc','am','ma','pe','rn']
 

@@ -7,8 +7,8 @@ Created on Tue Mar 23 20:15:39 2021
 
 import pandas as pd
 
-version = '210606'
-link = 'C:/Users/admin/Downloads/Peru/COVID_Slovakia_210606.csv'
+version = '211118'
+link = 'C:/Users/admin/Downloads/Peru/COVID_Slovakia_211118.csv'
 
 
 
@@ -86,7 +86,7 @@ path5 = 'C:/Users/admin/Downloads/Peru/Slovakia_'+version+'_mob.csv'
 mob.to_csv(path5,index=False)
 
 
-del  version, path5, tests, mx_sexo, mx_munic, mx_code1, mx_code2, mx_paciente, mx_resultado, df_MX
+del  version, path5
 
 
 del mob,a

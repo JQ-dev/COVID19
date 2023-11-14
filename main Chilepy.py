@@ -7,7 +7,7 @@ Created on Sat May 29 22:11:40 2021
 
 import pandas as pd
 
-link = 'C:/Users/admin/Downloads/Peru/COVID_Chile_300525.csv'
+link = 'C:/Users/admin/Downloads/Peru/COVID_Chile_31102021.csv'
 
 url1 = "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/input/ReporteDiario/HospitalizadosUCIEtario.csv"
 url2 = "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/input/ReporteDiario/FallecidosEtario.csv"
